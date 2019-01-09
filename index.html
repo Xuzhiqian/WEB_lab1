@@ -1,0 +1,115 @@
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+  </head>
+
+<body>
+
+    <!-- As a heading -->
+    <nav class="navbar navbar-light" style="background-color: #a3c2fd;">
+        <span class="navbar-brand mb-0 h1">DBEngine</span>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row justify-content-around mt-4">
+	<div class="form-inline">
+
+        <label class="sr-only" for="text_search">Word</label>
+        <div class="input-group  mr-sm-3">
+            <div class="input-group-prepend">
+                <div class="input-group-text">Word</div>
+            </div>
+            <input type="text" id="text_search" class="form-control" name="text_search"/>
+        </div>
+
+        <label class="sr-only" for="location_search">Location</label>
+        <div class="input-group mr-sm-3">
+            <div class="input-group-prepend">
+                <div class="input-group-text">Location</div>
+            </div>
+            <input type="text" id="location_search" class="form-control" name="location_search"/>
+        </div>
+
+        <label class="sr-only" for="person_search">Person</label>
+        <div class="input-group mr-sm-3">
+            <div class="input-group-prepend">
+                <div class="input-group-text">Person</div>
+            </div>
+            <input type="text" id="person_search" class="form-control" name="person_search"/>
+        </div>
+
+        <div class="form-group mr-sm-3">
+        <label class="sr-only" for="date_search">Date</label>
+        <div class="input-group" id="datetimepicker4">
+                <div class="input-group-prepend">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+                <input type="text" id="date_search" name="date_search" class="form-control datetimepicker-input" placeholder="Date"/>
+        </div>
+    	<select id="order" class="form-control" name="means">
+        	<option value="previous" label="previous">Previous</option>
+       		<option selected="selected" value="upcoming" label="upcoming">Upcoming</option>
+        	<option value="exact" label="exactDay">Exact</option>
+    	</select>
+        </div>
+
+    	<button id="searchBtn" class="btn btn-primary" onclick="search()">Search</button>
+	</div>
+    </div>
+
+    <div class="row mt-4">
+        <table class="table table-bordered">
+  <thead>
+    <tr>
+      <th style="min-width:8em;" scope="col">Sent</th>
+      <th style="min-width:8em;" scope="col">From</th>
+      <th style="min-width:36em;" scope="col">Subject</th>
+      <th style="min-width:8em;" scope="col">Deadline</th>
+      <th scope="col">Location</th>
+      <th scope="col">Person</th>
+      <th style="min-width:16em;" scope="col">Keywords</th>
+      <th scope="col">Links</th>
+    </tr>
+  </thead>
+  <tbody id="table_body">
+  </tbody>
+</table>
+    </div>
+</div>
+	<script>
+    var tablize = function() {
+      let s= "<tr>";
+      for (let i=0;i<arguments.length;i++)
+        s += "<td>" + arguments[i] + "</td>";
+      return s+"</tr>";
+    }
+    var draw_table= function(result) {
+        let s = "";
+        result.forEach(row => {
+            s += tablize(row.sent, row.from, '<a href="'+row.subjectaddr+'" rel="nofollow">'+row.subject+'</a>', row.deadLine, row.locationWords.join('\n'), row.personWords.join('\n'), row.keyWords.join('\n'), '<a href="'+row.webPage+'" rel="nofollow">Link</a>');
+        });
+        document.getElementById("table_body").innerHTML = s;
+    }
+    var search = function() {
+            $.ajax({
+                type:"GET",
+                url:"/search?w="+$("#text_search").val()+"&l="+$("#location_search").val()+"&p="+$("#person_search").val()+"&d="+$("#date_search").val()+"&o="+$("#order").val(),
+                contentType: "application/json",
+                success: function(result) {
+                  draw_table(JSON.parse(result));
+                }
+            });
+          }
+
+  </script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+</body>
+</html>

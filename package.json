@@ -1,0 +1,26 @@
+{
+  "name": "bigLab",
+  "version": "1.0.0",
+  "description": "",
+  "main": "DBCrawler.js",
+  "dependencies": {
+    "express": "^4.16.4",
+    "ner": "^1.0.0",
+    "ner-server": "^2.0.2",
+    "node-tfidf": "0.0.2",
+    "xmlreader": "^0.2.3",
+    "cheerio": "*",
+    "js-md5": "*",
+    "retext-keywords": "*",
+    "to-vfile": "*",
+    "retext": "*",
+    "bootstrap": "*"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
